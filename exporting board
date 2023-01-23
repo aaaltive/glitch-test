@@ -1,0 +1,42 @@
+Sub ExportShapesToCSV()
+    Dim ws As Worksheet
+    Dim shp As Shape
+    Dim rng As Range
+    Dim csvFile As String
+    Dim csvRow As String
+    Dim c As Range
+    
+    ' Set the worksheet and range to read from
+    Set ws = ActiveSheet
+    Set rng = ws.Range("A1:T26")
+    
+    ' Set the path and filename for the CSV file
+    csvFile = "C:\Users\buddy\OneDrive - Arizona State University\Desktop\shapes.csv"
+    
+    ' Open the CSV file for writing
+    Open csvFile For Output As #1
+    
+    ' Write the headers for the shape attributes
+    Print #1, "Shape Name, Left, Top, Width, Height, Type, Color, Outline, Fill Transparency, Line Transparency"
+    
+    ' Loop through all the shapes on the worksheet
+    For Each shp In ws.Shapes
+        ' Write the shape attributes to the CSV file
+        csvRow = shp.Name & "," & shp.Left & "," & shp.Top & "," & shp.Width & "," & shp.Height & "," & shp.AutoShapeType & "," & shp.Fill.ForeColor.RGB & "," & shp.Line.ForeColor.RGB & "," & shp.Fill.Transparency & "," & shp.Line.Transparency
+        Print #1, csvRow
+    Next shp
+    
+    ' Write the headers for the cells
+    Print #1, "Cell Address, Value, Format"
+    
+    ' Loop through all the cells in the range
+    For Each c In rng
+        ' Write the cell attributes to the CSV file
+        csvRow = c.Address & "," & c.Value & "," & c.NumberFormat
+        Print #1, csvRow
+    Next c
+    
+    ' Close the CSV file
+    Close #1
+End Sub
+
